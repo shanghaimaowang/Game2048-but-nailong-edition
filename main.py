@@ -31,13 +31,9 @@ pygame.draw.rect(start_background,(255, 255, 0),(2,2,86,46),border_radius=24)
 start_background.blit(start_font,temp_rect)
 if_get_start=False
 
-#开始按钮测试
+# 开始按钮测试
 overlay_surface = pygame.Surface((600, 430), pygame.SRCALPHA)
 overlay_surface.fill((0, 0, 0, 128))
-
-
-
-
 
 #游戏进程主循环
 is_running=True
@@ -47,18 +43,35 @@ while is_running:
         if event.type==pygame.QUIT:
             pygame.quit()
             sys.exit()
+
         if event.type==pygame.MOUSEBUTTONDOWN:
             if start_rect.collidepoint(event.pos):
                 if_get_start=True
+                game_2048.randomgenerateNumber()
 
+        if event.type==pygame.KEYDOWN and if_get_start:
+            if event.type == pygame.KEYDOWN:
+                if event.key in [pygame.K_UP, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT]:
+                    game_2048.set_direction(
+                        {pygame.K_UP: 'up', pygame.K_DOWN: 'down', pygame.K_LEFT: 'left', pygame.K_RIGHT: 'right'}[
+                            event.key])
+                    game_2048.move()
+                    game_2048.randomgenerateNumber()
 
+    #打印背景
     screen.blit(background, (0, 0))
     screen.blit(overlay,(0,0))
     screen.blit(start_background, start_rect)
+
     if if_get_start:
         #游戏显示画布
         game_main_surface=pygame.Surface((430,430),pygame.SRCALPHA)
+
+
+
+
         game_2048.draw_rect(game_main_surface)
         screen.blit(game_main_surface, (0, 0))
+
     pygame.display.flip()
     clock.tick(60)
