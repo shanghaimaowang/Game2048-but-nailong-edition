@@ -16,6 +16,9 @@ class ezfe:
         self.game_matrix=[["null"for _ in range(self.matrix_size[1])]
                           for _ in range(self.matrix_size[0])]
 
+    def get_source(self):
+        return self.source
+
     def randomgenerateNumber(self):
         empty_pos=[]
         for i in range(self.matrix_size[0]):
@@ -157,3 +160,16 @@ class ezfe:
                 for j in range(self.matrix_size[0]):
                     self.game_matrix[i][j]=col_[j]
 
+    @property
+    def gameisover(self):
+        for i in range(self.matrix_size[0]):
+            for j in range(self.matrix_size[1]):
+                if self.game_matrix[i][j]=='null':return False
+                if i==self.matrix_size[0]-1 and j==self.matrix_size[1]-1: continue
+                elif i==self.matrix_size[0]-1:
+                    if self.game_matrix[i][j]==self.game_matrix[i][j+1]: return False
+                elif j==self.matrix_size[1]-1:
+                    if self.game_matrix[i][j]==self.game_matrix[i+1][1]: return False
+                else:
+                    if self.game_matrix[i][j]==self.game_matrix[i][j+1] or self.game_matrix[i][j]==self.game_matrix[i+1][j]: return False
+        return True

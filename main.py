@@ -4,7 +4,7 @@ from game2048 import ezfe
 
 #初始化游戏
 pygame.init()
-
+game_2048 = ezfe()
 #创建窗口（画布）、时钟
 screen=pygame.display.set_mode(size=(600,430))
 pygame.display.set_caption("2048 for the best")
@@ -35,9 +35,13 @@ if_get_start=False
 overlay_surface = pygame.Surface((600, 430), pygame.SRCALPHA)
 overlay_surface.fill((0, 0, 0, 128))
 
+#分数
+source_font=pygame.font.SysFont("kaiti",30,True)
+source_font = source_font.render(text="分数：" , antialias=True, color="black")
+source_rect = pygame.Rect(430, 300, 150, 100)
+
 #游戏进程主循环
 is_running=True
-game_2048 = ezfe()
 while is_running:
     for event in pygame.event.get():
         if event.type==pygame.QUIT:
@@ -58,18 +62,24 @@ while is_running:
                     game_2048.move()
                     game_2048.randomgenerateNumber()
 
+    source_font_ = pygame.font.SysFont("kaiti", 30, True)
+    source = game_2048.get_source()
+    source_font_ = source_font_.render(text=str(source), antialias=True, color="black")
+    source_rect_ = pygame.Rect(520, 300, 150, 100)
+
     #打印背景
     screen.blit(background, (0, 0))
     screen.blit(overlay,(0,0))
     screen.blit(start_background, start_rect)
+    screen.blit(source_font_, source_rect_)
+    screen.blit(source_font, source_rect)
 
     if if_get_start:
+        if game_2048.gameisover:
+            is_running=False
+
         #游戏显示画布
         game_main_surface=pygame.Surface((430,430),pygame.SRCALPHA)
-
-
-
-
         game_2048.draw_rect(game_main_surface)
         screen.blit(game_main_surface, (0, 0))
 
